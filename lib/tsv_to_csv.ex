@@ -2,7 +2,7 @@ defmodule TsvToCsv do
   def main([separator | files]) do
     files
     |> Enum.each(fn file ->
-      convert(file, separator)
+      convert(file, separator |> to_charlist)
     end)
   end
 
@@ -15,7 +15,7 @@ defmodule TsvToCsv do
     """
   end
 
-  def convert(filepath, separator) do
+  def convert(filepath, [separator]) do
     csv_path = (filepath |> Path.rootname) <> ".csv"
     File.stream!(filepath)
     |> CSV.decode(separator: separator)
