@@ -5,6 +5,7 @@ defmodule TsvToCsv.Mixfile do
     [app: :tsv_to_csv,
      version: "0.1.0",
      elixir: "~> 1.4",
+     escript: [main_module: TsvToCsv],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps()]
@@ -28,6 +29,6 @@ defmodule TsvToCsv.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:csv, "~> 1.4.2"}]
   end
 end

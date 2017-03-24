@@ -1,18 +1,25 @@
 defmodule TsvToCsv do
-  @moduledoc """
-  Documentation for TsvToCsv.
-  """
+  def main([separator | files]) do
+    files
+    |> Enum.each(fn file ->
+      convert(file, separator)
+    end)
+  end
 
-  @doc """
-  Hello world.
+  def main(_) do
+    IO.puts """
+    Usage:
+      tsv_to_csv separator file1 file2 ....
+    e.g.
+      tsv_to_csv "\t" file1.tsv file2.tsv
+    """
+  end
 
-  ## Examples
-
-      iex> TsvToCsv.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def convert(filepath, separator) do
+    csv_path = (filepath |> Path.rootname) <> ".csv"
+    File.stream!(filepath)
+    |> CSV.decode(separator: separator)
+    |> CSV.encode
+    |> Enum.into(File.stream!(csv_path))
   end
 end
