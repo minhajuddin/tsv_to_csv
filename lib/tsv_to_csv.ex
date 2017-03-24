@@ -1,5 +1,5 @@
 defmodule TsvToCsv do
-  def main([separator | files]) do
+  def main([separator | [_ | _] = files]) do
     files
     |> Enum.each(fn file ->
       convert(file, separator |> to_charlist)
@@ -11,15 +11,15 @@ defmodule TsvToCsv do
     Usage:
       tsv_to_csv separator file1 file2 ....
     e.g.
-      tsv_to_csv "\t" file1.tsv file2.tsv
+      tsv_to_csv $'\\t' file1.tsv file2.tsv
+      tsv_to_csv '|' file1.txt file2.txt
     """
   end
 
   def convert(filepath, [separator]) do
-    csv_path = (filepath |> Path.rootname) <> ".csv"
     File.stream!(filepath)
     |> CSV.decode(separator: separator)
     |> CSV.encode
-    |> Enum.into(File.stream!(csv_path))
+    |> Enum.into(IO.stream(:stdio, :line))
   end
 end
