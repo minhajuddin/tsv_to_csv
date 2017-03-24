@@ -18,7 +18,7 @@ defmodule TsvToCsv do
 
   def convert(filepath, separator) do
     File.stream!(filepath)
-    |> Enum.map(& String.split(&1, separator))
+    |> Enum.map(& &1 |> String.trim |> String.split(separator))
     |> CSV.encode
     |> Enum.into(IO.stream(:stdio, :line))
   end
