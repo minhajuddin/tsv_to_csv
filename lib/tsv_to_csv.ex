@@ -2,7 +2,7 @@ defmodule TsvToCsv do
   def main([separator | [_ | _] = files]) do
     files
     |> Enum.each(fn file ->
-      convert(file, separator |> to_charlist)
+      convert(file, separator)
     end)
   end
 
@@ -16,9 +16,9 @@ defmodule TsvToCsv do
     """
   end
 
-  def convert(filepath, [separator]) do
+  def convert(filepath, separator) do
     File.stream!(filepath)
-    |> Enum.map(& String.split(&1, to_string(separator)))
+    |> Enum.map(& String.split(&1, separator))
     |> CSV.encode
     |> Enum.into(IO.stream(:stdio, :line))
   end
